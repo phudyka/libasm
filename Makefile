@@ -6,15 +6,16 @@
 #    By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/23 11:38:10 by phudyka           #+#    #+#              #
-#    Updated: 2025/01/23 11:38:57 by phudyka          ###   ########.fr        #
+#    Updated: 2025/01/23 16:16:50 by phudyka          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libasm.a
-NASM = nasm
-NASM_FLAGS = -f elf64
-CC = gcc
-CFLAGS = -Wall -Wextra -Werror
+
+NASM = nasm               # Netwide Assembler - equivalent de GCC pour l'assembleur
+NASM_FLAGS = -f elf64     # Format objet pour systeme 64bits, Executable and Linkable Format (standard Linux)
+CC = gcc                 
+CFLAGS = -Wall -Wextra -Werror 
 
 SRCS = src/ft_strlen.s \
        src/ft_strcpy.s \
