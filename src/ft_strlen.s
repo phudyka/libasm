@@ -43,4 +43,4 @@ ft_strlen:
 	mov rax, -1				; Valeur de retour avec une erreur (-1).
 
 .end:
-	ret						; Retourne la longueur de la chaine dans RAX
+	ret						; Retourne la longueur de la chaine dans RAX (return)
