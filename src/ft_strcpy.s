@@ -7,9 +7,9 @@ section .text
 ft_strcpy:
 
 	;Verification des parametres
-	test rdi, rdi ; char *destination
+	test rdi, rdi		; char *destination
 	jz .null_dest
-	test rsi, rsi ; char *source
+	test rsi, rsi		; char *source
 	jz .null_source
 
 	mov rax, rdi
@@ -26,24 +26,24 @@ ft_strcpy:
 	jz .end
 
 	; Incrémentation
-	inc rdi ; destination[i++]
-	inc rsi ; source[i++]
+	inc rdi 			; destination[i++]
+	inc rsi 			; source[i++]
 	jmp .ft_strcpy_loop
 
 .null_dest:
 	; Gestion d'erreur si dest = NULL
 
 	mov rdi, 0
-	call __errno_location
-	mov dword [rax], 14 ; EFAULT
+	call __errno_location wrt ..plt
+	mov dword [rax], 14	; EFAULT
 	mov rax, 0
 	ret
 
 .null_source:
 	; Gestion d'erreur si source = NULL
 	mov rdi, 0
-	call __errno_location
-	mov dword [rax], 14 ; EFAULT
+	call __errno_location wrt ..plt
+	mov dword [rax], 14	; EFAULT
 	mov rax, 0
 	ret
 

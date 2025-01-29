@@ -1,48 +1,53 @@
 ; ASM Intel X86-64bits -- FT_STRDUP
 
-global	ft_strdup
-extern	__errno_location
-extern	malloc
-extern	ft_strlen
-
-extern	ft_strcpy
+global ft_strdup
+extern __errno_location
+extern malloc
+extern ft_strlen
+extern ft_strcpy
 
 section .text
 ft_strdup:
 
-	push rdi		; Sauvegarde dest sur la heap
-	test rdi, rdi
-	jz .null_error
+    push rdi                ; Sauvegarde dest sur la stack
+    test rdi, rdi
+    jz .null_error
 
-	call ft_strlen	; Appel a la fonction extern ft_strlen
-	inc rax 		; +1 pur '\0'
+    call ft_strlen          ; Appel à ft_strlen pour calculer la taille.
+    cmp rax, -1             ; Verifie retour positif de ft_strlen.
+    je .strlen_error        ; "Jump if is Equal to", em l'occurence -1.
+    inc rax                 ; Ajouter +1 pour le caractère nul '\0'.
 
-	;MALLOC
-	mov rdi, rax	; sizeof()
-	call malloc
-	test rax, rax
-	jz .malloc_error
+    ; Allocation de mémoire avec malloc
+    mov rdi, rax            ; Passer la taille en paramètre à malloc.
+    call malloc wrt ..plt
+    test rax, rax           ; Vérifier si malloc a réussi.
+    jz .malloc_error
 
-	;Preparation de la copie
-	mov rdi, rax
-	pop rsi			; Restaure dest de la heap
+    ; Préparation pour la copie
+    mov rdi, rax            ; Adresse mémoire allouée.
+    pop rsi                 ; Restaurer l'adresse source depuis la stack.
 
-	;Copie src dans dest
-	push rax		; Sauvegarde adresse d'allocation sur la heap
-	call ft_strcpy	; Appel a la fonction extern ft_strcpy
-	pop rax			; Restaure adresse pour return
-	ret
+    ; Copie des données
+    push rax                ; Sauvegarder l'adresse allouée.
+    call ft_strcpy          ; Appel à ft_strcpy pour copier la chaîne.
+    pop rax                 ; Restaurer l'adresse allouée pour le retour.
+    ret
 
 .null_error:
-	mov rdi, 0
-	call __errno_location
-	mov dword [rax], 14 ; EFAULT
-	mov rax, 0
-	ret
+    mov rdi, 0
+    call __errno_location wrt ..plt
+    mov dword [rax], 14     ; EFAULT "Bad Address"
+    mov rax, 0
+    ret
+
+.strlen_error:
+    pop rdi                 ; Free la stack.
+    ret
 
 .malloc_error:
-	mov rdi, 0
-	call __errno_location
-	mov dword [rax], 12 ; ENOMEM "available data space not large enough to accommodate the shared memory segment"
-	mov rax, 0
-	ret
+    mov rdi, 0
+    call __errno_location wrt ..plt
+    mov dword [rax], 12     ; ENOMEM "Pas assez de mémoire"
+    mov rax, 0
+    ret

@@ -11,7 +11,7 @@ ft_write:
 	test rsi, rsi	; check NULL
 	jz .error_buf
 
-	mov rax 1		; 1 correspond au syscall write 
+	mov rax, 1		; 1 correspond au syscall write 
 	syscall
 
 	;Gestion d'erreur
@@ -32,7 +32,7 @@ ft_write:
 	mov rdi, rax
 
 .set_errno:
-	call _errno_location
+	call __errno_location wrt ..plt
 	mov [rax], rdi
 	mov rax, -1 	; Stocke le code d'erreur (dans `rdi`) à l'adresse retournée
 	ret

@@ -16,7 +16,7 @@ section .text				; Réserve une nouvelle section pour le code executable.
 ft_strlen:
 	; Vérification des parametres d'entrée:
 	test rdi, rdi			; Vérification de la valeur du pointeur, contient l'adresse de la chaine. rdi = adresse de base de la chaine.
-	jz .null_pointer		; Si pointeur NULL, renvoie une erreur via errno - jz = "Jump if Zero",  equivalent de je ("Jump if Equal"). Utilise en suite un "test"/"cmp" pour connaitre le resultat.
+	jz .null_pointer		; Si pointeur NULL, renvoie une erreur via errno. jz = "Jump if Zero" (si le resultat = 0), equivalent de je ("Jump if Equal"). Utilise en suite un "test"/"cmp" pour connaitre le resultat.
 
 	; Initialisation des registres:
 	xor rax, rax			; rax = registre general, accumulateur (valeur de retour d'une fonction).Iterateur initialiser a 0, Valeur de retour. (Plus rapide que "mov rax, 0").
@@ -38,9 +38,9 @@ ft_strlen:
 .null_pointer:
 	; Gestion du pointeur NULL
 	mov rdi, 0				; Code d'erreur.
-	call __errno_location	; Appel a errno.
+	call __errno_location wrt ..plt	; Appel a errno avec fPIC pour le rendre compilable sur les recentes versions Linux. wrt = "With Respect To" -> ..plt "Procedure Linkage Table", appel la vraie addresse de la fonction de mainiere securisee.
 	mov dword [rax], 14		; dword = 32bits, 14 = EFAULT = "Bad Address". equivalent de errno = EFAULT; en C.
 	mov rax, -1				; Valeur de retour avec une erreur (-1).
 
 .end:
-	ret						; Retourne la longueur de la chaine dans RAX (return)
+	ret						; Retourne la longueur de la chaine dans RAX et restaure l'adresse au dessus de la heap.

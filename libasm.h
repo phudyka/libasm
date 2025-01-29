@@ -6,7 +6,7 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 11:38:14 by phudyka           #+#    #+#             */
-/*   Updated: 2025/01/23 16:15:46 by phudyka          ###   ########.fr       */
+/*   Updated: 2025/01/28 11:40:49 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <stddef.h> 
 #include <errno.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 size_t	ft_strlen(const char *str);
